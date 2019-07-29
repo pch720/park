@@ -1,0 +1,277 @@
+package poly.controller;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.apache.catalina.servlet4preview.http.HttpServletRequest;
+import org.apache.log4j.Logger;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import poly.dto.UserDTO;
+import poly.service.IUserService;
+import poly.util.CmmUtil;
+
+@Controller
+public class UserController {
+	
+	private Logger log = Logger.getLogger(this.getClass());
+	
+	@Resource(name="UserService")
+	private IUserService userservice;
+
+	@RequestMapping(value="/userReg")
+	public String userReg() throws Exception{
+		
+		return "/user/userReg";
+	}
+	
+	@RequestMapping(value="/index")
+	public String index() throws Exception{
+		return "/index";
+	}
+	
+	@RequestMapping(value="/userRegProc")
+	public String userRegProc(HttpServletRequest request,Model model) throws Exception{
+	
+		
+		String userEmail = request.getParameter("userEmail");
+		String userName = request.getParameter("userName");
+		String userPassword = request.getParameter("userPassword");
+		String userBirth = request.getParameter("userBirth");
+		String userPhone = request.getParameter("userPhone");
+		String userGender = request.getParameter("userGender");
+		String userQuestion = request.getParameter("userQuestion");
+		String userAnswer = request.getParameter("userAnswer");
+		log.info("userEmail 확인:"+userEmail);
+		log.info("userName 확인:"+userName);
+		log.info("userPassword 확인:"+userPassword);
+		log.info("userBirth 확인:"+userBirth);
+		log.info("userPhone 확인:"+userPhone);
+		log.info("userGender 확인:"+userGender);
+		log.info("userQuestion 확인:"+userQuestion);
+		log.info("userAnswer 확인:"+userAnswer);
+		
+		UserDTO uDTO =new UserDTO();
+		uDTO.setUserEmail(userEmail);
+		uDTO.setUserName(userName);
+		uDTO.setUserPassword(userPassword);
+		uDTO.setUserBirth(userBirth);
+		uDTO.setUserPhone(userPhone);
+		uDTO.setUserGender(userGender);
+		uDTO.setUserQuestion(userQuestion);
+		uDTO.setUserAnswer(userAnswer);
+		
+		int result = 0;
+		
+		result=userservice.userRegProc(uDTO);
+		log.info("결과값:"+result);
+		
+		String msg, url;
+		if(result ==1) {
+			msg="회원가입 성공";
+			url="/index.do";
+		}else {
+			msg="회원가입 실패";
+			url="/userReg.do";
+		}
+		model.addAttribute("msg",msg);
+		model.addAttribute("url",url);
+		
+		return "/redirect";
+	}
+	
+	
+	
+	 @RequestMapping(value="/userReceive")
+	 public String receive(HttpServletRequest request,Model model, HttpSession session) throws Exception {
+		 String userEmail = request.getParameter("userEmail");
+		 String userPassword = request.getParameter("userPassword");
+
+		 log.info("userEmail 확인:"+userEmail);
+		 log.info("userPassword 확인:"+userPassword);
+		 
+		 UserDTO uDTO = new UserDTO();
+		 uDTO.setUserEmail(userEmail);
+		 uDTO.setUserPassword(userPassword);
+		 
+		 // service -> mapper.xml에서 select query문으로 request로 받아온
+		 // userEmail과 password가 모두 맞는지 확인하고
+		 // 일치하는 갯수가 1이면  로그인 후 화면으로 넘기고 아니면 다시 원래 페이지로 돌아감
+		 
+		 uDTO = userservice.getUserInfo(uDTO);
+		 
+		 String msg,url;
+		 if(uDTO==null) {
+			 msg="로그인에 실패하였습니다.";
+			 url="/index.do";
+		 }else {
+			 //session 객체에 유저의 DTO정보를 담음
+			 session.setAttribute("userSeq", uDTO.getUserSeq());
+			 session.setAttribute("userEmail", uDTO.getUserEmail());
+			 session.setAttribute("userName", uDTO.getUserName());
+			 
+			 log.info(" session : " + session);
+			 
+			 
+			 msg="로그인 성공하였습니다.";
+			 url="/logcheck.do";
+			 
+		 }
+		 
+		 model.addAttribute("msg",msg);
+		 model.addAttribute("url",url);
+		 return "redirect";		 
+	 }
+
+	@RequestMapping(value="/pCheck.do", method=RequestMethod.POST) 
+	public @ResponseBody int pCheck (HttpServletRequest request, HttpServletResponse response) throws Exception{
+		String phone=CmmUtil.nvl(request.getParameter("phone"));
+		int	count = userservice.pCheck(phone);
+		return count;
+	}
+	@RequestMapping(value="/eCheck.do", method=RequestMethod.POST) 
+	public @ResponseBody int eCheck (HttpServletRequest request, HttpServletResponse response) throws Exception{
+		String email=CmmUtil.nvl(request.getParameter("email"));
+		int	count = userservice.eCheck(email);
+		return count;
+	}
+	 @RequestMapping(value="/logout")
+	 public String logout(HttpSession session) throws Exception {
+		 session.invalidate();
+		 return "/index";
+	 }
+	  @RequestMapping(value="/forgetEmail")
+	  public String forgetE (HttpServletRequest request, Model model) throws Exception {
+		  
+		  String userName = request.getParameter("userName");	 
+		  String userPhone = request.getParameter("userPhone");
+		 
+		  log.info("userName 확인:"+userName);
+		  log.info("userPhone 확인:"+userPhone);
+		  
+		  UserDTO uDTO =new UserDTO();
+		  uDTO.setUserName(userName);
+		  uDTO.setUserPhone(userPhone);
+		  int result=0;
+		  String email1,email2;
+		  
+		  result=userservice.forgetEmail(uDTO);
+		  log.info("결과값:"+result);
+		  
+		  email1=userservice.email1(uDTO);
+		  email2=userservice.email2(uDTO);
+		  String msg,url;
+		  if(result==0) {
+			 msg="등록하신 정보의 회원이 없습니다.";
+			 url="/forgetE.do";
+		 }else {
+			 msg="회원님의 아이디는 "+email1+"*****"+email2+ "입니다.";
+			 url="/index.do";
+		 }
+		 model.addAttribute("msg",msg);
+		 model.addAttribute("url",url);
+		  
+		  return "redirect"; 
+	  }
+	  @RequestMapping(value="forgetE", method=RequestMethod.GET)
+	  public String forgetE (HttpServletRequest request, HttpServletResponse response, ModelMap
+	  model) throws Exception {
+	  return "/user/forgetE"; 
+	  }
+	
+	  @RequestMapping(value="forgetP", method=RequestMethod.GET)
+	  public String forgetP (HttpServletRequest request, HttpServletResponse response, ModelMap
+	  model) throws Exception {
+	  return "/user/forgetP"; 
+	  }
+	  
+	  @RequestMapping(value="/forgetPassword")
+	  public String forgetP (HttpServletRequest request, Model model) throws Exception {
+		  
+		  String userEmail = request.getParameter("userEmail");	 
+		 
+		  log.info("userEmail 확인:"+userEmail);
+		  
+		  UserDTO uDTO =new UserDTO();
+		  uDTO.setUserEmail(userEmail);
+		  
+		  int result=0;
+		  String que;
+		  result=userservice.forgetPassword(uDTO);
+		  log.info("결과값:"+result);
+		  que=userservice.que(uDTO);
+		  
+		  String msg,url,as;
+		  if(result==0) {
+			 msg="등록하신 정보의 회원이 없습니다.";
+			 url="/forgetP.do";
+			 model.addAttribute("msg",msg);
+			 model.addAttribute("url",url);
+			 return "/redirect";			 
+		 }else {
+			 as=que;
+			 msg="비밀번호 찾기 문제로 이동.";
+			 url="/question.do";
+			 model.addAttribute("as",as);
+			 model.addAttribute("msg",msg);
+			 model.addAttribute("url",url);
+			 return "/user/question";
+			 
+		 }
+		
+	  }
+	  @RequestMapping(value="/questionProc")
+	  public String questionProc (HttpServletRequest request, Model model) throws Exception {
+		  
+		  String userAnswer = request.getParameter("userAnswer");	 
+		  String userQuestion = request.getParameter("userQuestion");
+		  
+		  log.info("userAnswer 확인:"+userAnswer);
+		  log.info("userQuestion 확인:"+userQuestion);
+		  
+		  UserDTO uDTO =new UserDTO();
+		  uDTO.setUserAnswer(userAnswer);
+		  uDTO.setUserQuestion(userQuestion);
+		  
+		  int result=0;
+		  String pw;
+		  
+		  result=userservice.answer(uDTO);
+		  log.info("결과값:"+result);
+		  
+		  pw=userservice.pw(uDTO);
+		  String msg,url;
+		  if(result==0) {
+			 msg="문제의 답이 옳지 않습니다.";
+			 url="/forgetP.do";
+		 }else {
+			 msg="회원님의 비밀번호는 "+pw+" 입니다.";
+			 url="/index.do";
+		 }
+		 model.addAttribute("msg",msg);
+		 model.addAttribute("url",url);
+		  
+		  return "redirect"; 
+	  }
+	  @RequestMapping(value="question", method=RequestMethod.GET)
+	  public String question (HttpServletRequest request, HttpServletResponse response, ModelMap
+	  model) throws Exception {
+	  return "/user/question"; 
+	  }
+	  @RequestMapping(value="main", method=RequestMethod.GET)
+	  public String main (HttpServletRequest request, HttpServletResponse response, ModelMap
+	  model) throws Exception {
+	  return "/user/main"; 
+	  }
+	  @RequestMapping(value="logcheck", method=RequestMethod.GET)
+	  public String logcheck (HttpServletRequest request, HttpServletResponse response, ModelMap
+	  model) throws Exception {
+	  return "/user/logcheck"; 
+	  }
+}
