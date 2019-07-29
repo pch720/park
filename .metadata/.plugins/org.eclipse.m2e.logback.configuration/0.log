@@ -3793,3 +3793,8 @@ org.eclipse.core.runtime.CoreException: Could not resolve artifact log4j:log4j:j
 2019-07-26 18:54:01,092 [Worker-988: Building workspace] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\data8316-12\Downloads\docduck-master\docduck-master\SpringPRJ\src\main\resources
 2019-07-26 18:54:01,092 [Worker-988: Building workspace] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (MS949 actually) to copy filtered resources, i.e. build is platform dependent!
 2019-07-26 18:54:01,092 [Worker-988: Building workspace] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\data8316-12\Downloads\docduck-master\docduck-master\SpringPRJ\src\test\resources
+2019-07-29 15:06:44,582 [Worker-2: Loading available Gradle versions] INFO  o.e.b.c.i.u.g.PublishedGradleVersions - Gradle version information cache is out-of-date. Trying to update.
+2019-07-29 15:06:47,270 [Worker-4: Building workspace] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (MS949 actually) to copy filtered resources, i.e. build is platform dependent!
+2019-07-29 15:06:47,273 [Worker-4: Building workspace] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\data8316-12\Downloads\docduck-master\docduck-master\SpringPRJ\src\main\resources
+2019-07-29 15:06:47,276 [Worker-4: Building workspace] WARN  o.e.m.c.i.embedder.EclipseLogger - Using platform encoding (MS949 actually) to copy filtered resources, i.e. build is platform dependent!
+2019-07-29 15:06:47,277 [Worker-4: Building workspace] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\data8316-12\Downloads\docduck-master\docduck-master\SpringPRJ\src\test\resources
