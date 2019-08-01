@@ -53,7 +53,7 @@
                   </div>
        			  
                   <form class="user">
-            		<a href="/index.do" class="btn btn-primary btn-user btn-block">
+            		<a href="/mainA.do" class="btn btn-primary btn-user btn-block">
                      	<%= userName %> 님  
                     </a>
                     

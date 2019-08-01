@@ -2,29 +2,30 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="check" key="selection"/>
+		<item value="p-5" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
-			<item value="check"/>
-			<item value="pCheck"/>
-			<item value="phone"/>
-			<item value="re1"/>
-			<item value="pCheck\"/>
-			<item value="8080"/>
-			<item value="NEXTVAL"/>
-			<item value="c"/>
-			<item value="cf"/>
-			<item value="cof"/>
-			<item value="비밀번호"/>
-			<item value="SELECT COUNT(*)"/>
-			<item value="user"/>
-			<item value="Log4j"/>
-			<item value="Log4j "/>
+			<item value="p-5"/>
+			<item value="collapseUtilities"/>
+			<item value="최근"/>
+			<item value="메인 화면"/>
+			<item value="chart"/>
+			<item value="table"/>
+			<item value="inter"/>
+			<item value="wink"/>
+			<item value="SB ADMIN"/>
+			<item value="SB"/>
+			<item value="container-fluid"/>
+			<item value="Dashboard"/>
+			<item value="tables"/>
+			<item value="dash"/>
+			<item value="fa-bars"/>
 		</list>
 		<list key="replacehistory">
+			<item value="after"/>
 			<item value="System.out.println"/>
 		</list>
 	</section>
@@ -32,7 +33,7 @@
 		<item value="288" key="DIALOG_WIDTH"/>
 		<item value="1|맑은 고딕|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|맑은 고딕" key="DIALOG_FONT_NAME"/>
 		<item value="391" key="DIALOG_HEIGHT"/>
-		<item value="832" key="DIALOG_X_ORIGIN"/>
-		<item value="292" key="DIALOG_Y_ORIGIN"/>
+		<item value="389" key="DIALOG_X_ORIGIN"/>
+		<item value="293" key="DIALOG_Y_ORIGIN"/>
 	</section>
 </section>
